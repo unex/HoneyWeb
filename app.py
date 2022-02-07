@@ -3,6 +3,7 @@ import os
 from io import BytesIO
 from datetime import datetime
 from contextlib import suppress
+from collections import OrderedDict
 
 from aiohttp import ClientSession
 
@@ -74,17 +75,17 @@ async def log_request(request: Request):
 
     if headers := request.headers:
         e.description += "**Headers:**\n```\n"
-        e.description += listify(headers)
+        e.description += listify(OrderedDict(sorted(headers.items())))
         e.description += "```\n"
 
     if cookies := request.cookies:
         e.description += "**Cookies:**\n```\n"
-        e.description += listify(cookies)
+        e.description += listify(OrderedDict(sorted(cookies.items())))
         e.description += "```\n"
 
     if query := dict(request.query_params):
         e.description += "**Query:**\n```\n"
-        e.description += listify(query)
+        e.description += listify(OrderedDict(sorted(query.items())))
         e.description += "```\n"
 
     content = None
